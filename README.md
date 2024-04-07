@@ -4,7 +4,7 @@ Este es el repositorio del *Grupo 4*, cuyos integrantes son:
 
 * Paulina Labrín - 202173045-1
 * María Silva - 202004684-0
-* Benjamín Goméz - 202173601-8
+* Benjamín Gómez - 202173601-8
 * Vladimir Sagredo - 202173553-4
 * **Tutor**: FELIPE IGNACIO FERNÁNDEZ AGUILAR
 
