@@ -6,7 +6,7 @@ Este es el repositorio del *Grupo 4*, cuyos integrantes son:
 * María Silva - 202004684-0
 * Benjamín Gómez - 202173601-8
 * Vladimir Sagredo - 202173553-4
-* **Tutor**: Felipe Ignacio Fernández Aguilar
+* **Tutor**: Felipe Márquez
 
 ## Wiki
 
