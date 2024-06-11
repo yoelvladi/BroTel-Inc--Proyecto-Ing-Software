@@ -1,12 +1,9 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
@@ -16,6 +13,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+// Cargar modelos
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -23,7 +21,7 @@ fs
       file.indexOf('.') !== 0 &&
       file !== basename &&
       file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
+      file !== 'index.js' // Ignorar el archivo index.js
     );
   })
   .forEach(file => {
@@ -31,13 +29,16 @@ fs
     db[model.name] = model;
   });
 
+// Asociar modelos si es necesario
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
 
+// Exportar los modelos y la instancia de Sequelize
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
