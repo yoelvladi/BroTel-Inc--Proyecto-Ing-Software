@@ -44,6 +44,7 @@
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.3.1",
     "react-refresh": "^0.11.0",
+    "react-router-dom": "^6.23.1",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
     "sass-loader": "^12.3.0",
@@ -82,6 +83,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "webpack-cli": "^5.1.4"
   },
   "jest": {
