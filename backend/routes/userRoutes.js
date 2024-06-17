@@ -1,7 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
-
+// Ruta del login
+router.post('/login', async (req, res)=>{
+    const {nombre, password} = req.body;
+    try{
+        const user = await db.User.findOne({where: {nombre, password}});
+        if(!user){
+            return res.status(401).json({error:'Datos Incorrectos'});
+        }
+        res.json({success: true,user});
+    }catch(error){
+        console.error("Error al iniciar sesion:", error);
+        res.status(500).json({error: 'Error al iniciar sesion'});
+    }
+});
 // Ruta para obtener todos los usuarios
 router.get('/', async (req, res) => {
     try {

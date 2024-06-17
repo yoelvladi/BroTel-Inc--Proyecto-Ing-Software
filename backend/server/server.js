@@ -2,11 +2,12 @@ const express = require('express');
 const { Sequelize } = require("sequelize");
 const db = require("../models");
 const userRoutes = require("../routes/userRoutes");
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 // Ruta de prueba
 app.get("/api", (req, res) => {
     res.json({ mensaje: "Hola mi gentesita" });
