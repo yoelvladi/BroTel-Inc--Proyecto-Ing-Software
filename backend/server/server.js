@@ -14,7 +14,7 @@ app.get("/api", (req, res) => {
 });
 
 // Rutas para el modelo
-app.use('/api/users', userRoutes);
+app.use('/api/users/login', userRoutes.login);
 
 // Sincronizar modelos con la base de datos
 db.sequelize.sync().then(() => {

@@ -2,19 +2,19 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models');
 // Ruta del login
-router.post('/login', async (req, res)=>{
-    const {nombre, password} = req.body;
-    try{
-        const user = await db.User.findOne({where: {nombre, password}});
-        if(!user){
-            return res.status(401).json({error:'Datos Incorrectos'});
+const login = async (req, res) => {
+    const { nombre, password } = req.body;
+    try {
+        const user = await db.User.findOne({ where: { nombre, password } });
+        if (!user) {
+            return res.status(401).json({ error: 'Datos Incorrectos' });
         }
-        res.json({success: true,user});
-    }catch(error){
-        console.error("Error al iniciar sesion:", error);
-        res.status(500).json({error: 'Error al iniciar sesion'});
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        res.status(500).json({ error: 'Error al iniciar sesión' });
     }
-});
+};
 // Ruta para obtener todos los usuarios
 router.get('/', async (req, res) => {
     try {
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Ruta para crear un nuevo usuario
-router.post('/', async (req, res) => {
+const registro= async (req, res) => {
     const { nombre, password, email } = req.body;
     try {
         const newUser = await db.User.create({ nombre, password, email });
@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
         console.error("Error al crear usuario:", error);
         res.status(500).json({ error: 'Error al crear usuario' });
     }
-});
+};
 
 // Ruta para actualizar un usuario existente por su ID
 router.put('/:id', async (req, res) => {
@@ -89,4 +89,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports ={login,registro};
