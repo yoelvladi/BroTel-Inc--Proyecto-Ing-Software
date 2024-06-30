@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
-
+import Nav from '../components/Nav'
 import '../styles/styles.css'; // Importa tu archivo CSS personalizado
 
 const DicomViewer = () => {
@@ -55,20 +55,25 @@ const DicomViewer = () => {
 
   return (
     <div>
-      <h2>Visor de Archivos DICOM</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form style={{ display: 'flex', justifyContent: 'center' }}>
-        <input type="file" accept=".dcm" multiple onChange={handleFileChange} />
-        <button type="button" onClick={displayImages}>Mostrar Imágenes</button>
-      </form>
-      <div id="dicomImage" className="dicom-wrapper">
-        {images.map((imageId, index) => (
-          <div key={index} className="dicom-viewer">
-            <canvas className="cornerstone-canvas" id={`dicomCanvas-${index}`}></canvas>
-          </div>
-        ))}
+      <nav>
+        <Nav/>
+      </nav>
+      <div>
+        <h2>Visor de Archivos DICOM</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form style={{ display: 'flex', justifyContent: 'center' }}>
+          <input type="file" accept=".dcm" multiple onChange={handleFileChange} />
+          <button type="button" onClick={displayImages}>Mostrar Imágenes</button>
+        </form>
+        <div id="dicomImage" className="dicom-wrapper">
+          {images.map((imageId, index) => (
+            <div key={index} className="dicom-viewer">
+              <canvas className="cornerstone-canvas" id={`dicomCanvas-${index}`}></canvas>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+      </div>
   );
 };
 

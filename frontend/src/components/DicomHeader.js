@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import dicomParser from 'dicom-parser';
 import '../styles/styles.css'; // Importa tu archivo CSS personalizado
+import Nav from '../components/Nav';
 
 const DicomHeader = () => {
   const [dicomInfo, setDicomInfo] = useState([]);
@@ -39,26 +40,31 @@ const DicomHeader = () => {
   );
 
   return (
-    <div className="dicom-info-container">
-      <input
-        type="file"
-        accept=".dcm"
-        onChange={handleFileChange}
-      />
-      <input
-        type="text"
-        className="search-input"
-        placeholder="Buscar información..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-      {filteredDicomInfo.map((item, index) => (
-        <div key={index} className="dicom-info-item">
-          <h3>{item.title}</h3>
-          <p>{item.value}</p>
+    <div>
+      <nav>
+        <Nav/>
+      </nav>
+        <div className="dicom-info-container">
+          <input
+            type="file"
+            accept=".dcm"
+            onChange={handleFileChange}
+          />
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Buscar información..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          {filteredDicomInfo.map((item, index) => (
+            <div key={index} className="dicom-info-item">
+              <h3>{item.title}</h3>
+              <p>{item.value}</p>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>  
   );
 };
 

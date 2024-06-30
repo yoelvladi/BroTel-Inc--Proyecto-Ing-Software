@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import '../styles/dicomViewer.css';
+import Nav from '../components/Nav'
 
 
 const DicomViewer = () => {
@@ -40,15 +41,21 @@ const DicomViewer = () => {
 
   return (
     <div>
-      <h2>Visor de Archivos DICOM</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleFileSubmit}>
-        <input type="file" accept=".dcm" onChange={handleFileChange} />
-        <button type="submit">Cargar DICOM</button>
-      </form>
-      <div id="dicomImage" style={{ width: '512px', height: '512px', border: '1px solid black' }}></div>
+      <nav>
+        <Nav />
+      </nav>
+      <div>
+        <h2>Visor de Archivos DICOM</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <form onSubmit={handleFileSubmit}>
+          <input type="file" accept=".dcm" onChange={handleFileChange} />
+          <button type="submit">Cargar DICOM</button>
+        </form>
+        <div id="dicomImage" style={{ width: '512px', height: '512px', border: '1px solid black' }}></div>
+      </div>
     </div>
   );
 };
+
 
 export default DicomViewer;

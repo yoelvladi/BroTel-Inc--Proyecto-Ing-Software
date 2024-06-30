@@ -42,14 +42,22 @@ router.get('/:id', async (req, res) => {
 });
 
 // Ruta para crear un nuevo usuario
-const registro= async (req, res) => {
+
+const registro = async (req, res) => {
     const { nombre, password, email } = req.body;
     try {
+        // Verificar si el usuario ya existe
+        const existingUser = await db.User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: 'El usuario ya existe' });
+        }
+
+        // Crear el nuevo usuario sin encriptar la contraseña
         const newUser = await db.User.create({ nombre, password, email });
-        res.status(201).json(newUser);
+        res.status(201).json({ success: true, message: 'Usuario registrado correctamente', user: newUser });
     } catch (error) {
         console.error("Error al crear usuario:", error);
-        res.status(500).json({ error: 'Error al crear usuario' });
+        res.status(500).json({ success: false, message: 'Error al crear usuario' });
     }
 };
 
