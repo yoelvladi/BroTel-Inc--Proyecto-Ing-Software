@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import dicomParser from 'dicom-parser';
 import '../styles/styles.css'; // Importa tu archivo CSS personalizado
 import Nav from '../components/Nav';
+import * as XLSX from 'xlsx'; // Importa la biblioteca xlsx
 
 const DicomHeader = () => {
   const [dicomInfo, setDicomInfo] = useState([]);
@@ -72,6 +73,19 @@ const DicomHeader = () => {
     document.getElementById('dicom-file-input').value = null;
   };
 
+  const handleExportToExcel = () => {
+    const headers = ['Title', 'Value'];
+    const data = dicomInfo.map((item) => [item.title, item.value]);
+
+    // Crear el libro de Excel
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+    XLSX.utils.book_append_sheet(wb, ws, 'DICOM_Info');
+
+    // Descargar el archivo de Excel
+    XLSX.writeFile(wb, 'dicom_info.xlsx');
+  };
+
   // Filtrar la información según el término de búsqueda
   const filteredDicomInfo = dicomInfo.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -98,6 +112,7 @@ const DicomHeader = () => {
           onChange={handleSearchChange}
         />
         <button onClick={handleReset} className="reset-button">Limpiar</button>
+        <button onClick={handleExportToExcel} className="export-button">Exportar a Excel</button>
         {filteredDicomInfo.map((item, index) => (
           <div key={index} className="dicom-info-item">
             <h3>{item.title}</h3>
