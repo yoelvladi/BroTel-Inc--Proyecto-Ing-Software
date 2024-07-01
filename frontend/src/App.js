@@ -13,12 +13,14 @@ function App() {
   return (
     <div className="App">
       <nav>
-        <ul>
-          <li><Link to="/">Registrate</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to ="/login">Inicia Sesión</Link></li>
-          
-        </ul>
+        <h1>
+          <ul>
+            <li><Link to="/">Registrate</Link></li>
+            <li><Link to="/about">About</Link></li>
+            <li><Link to ="/login">Inicia Sesión</Link></li>
+            
+          </ul>
+          </h1>
       </nav>
       <Routes>
         <Route path="/" element = {<Registro/>}/>

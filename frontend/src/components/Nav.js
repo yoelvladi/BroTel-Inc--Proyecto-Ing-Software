@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/nav.css';
 
 function Navigation() {
   return (
+   <h1>
     <ul>
-      <li><Link to="/contact">Contact</Link></li>
-      <li><Link to="/DicomViewer">DicomViewer</Link></li>
-      <li><Link to="/DicomHeader">DicomHeader</Link></li>
+      <li ><Link to="/DicomViewer">DicomViewer</Link></li>
+      <li ><Link to="/DicomHeader">DicomHeader</Link></li>
     </ul>
+  </h1> 
   );
 }
 

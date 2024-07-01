@@ -4,8 +4,8 @@ import React from 'react';
 function About() {
   return (
     <div>
-      <h1>About Page</h1>
-      <p>Learn more about us here.</p>
+      <h1>Grupo 4</h1>
+      <p>Visualizador de imagenes</p>
     </div>
   );
 }

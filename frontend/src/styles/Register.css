@@ -2,7 +2,7 @@
 
 /* Estilo global */
 body.fondo {
-    background-color: #f0f4f8; /* Color de fondo claro y suave */
+    background-color: #577ee7; /* Color de fondo claro y suave */
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -14,7 +14,7 @@ body.fondo {
 
 /* Contenedor del formulario */
 .register-container {
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
