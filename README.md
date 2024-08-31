@@ -1,6 +1,6 @@
 # BroTel Inc
 
-Este es el repositorio del *BroTel inc*, cuyos integrantes son:
+Este es el repositorio del *BroTel inc* (previamente grupo 04), cuyos integrantes son:
 
 * Benjamín Gómez - 202173601-8
 * Vladimir Sagredo - 202173553-4
