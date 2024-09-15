@@ -37,6 +37,12 @@ module.exports = (sequelize) => {
         }
 
         }, 
+    permisos:{
+        type : DataTypes.BOOLEAN,
+        allowNull: false,
+        unique:false,
+        defaultValue: true,
+    }
     }, {
         sequelize,
         modelName : 'User',
