@@ -16,16 +16,16 @@ const login = async (req, res) => {
     }
 };
 const registro = async (req, res) => {
-    const { nombre, password, email } = req.body;
+    const { nombre, password, email, permisos } = req.body;
     try {
         // Verificar si el usuario ya existe
-        const existingUser = await db.Pacient.findOne({ where: { email } });
+        const existingUser = await db.Pacient.findOne({ where: { email_paciente: email} });
         if (existingUser) {
             return res.status(400).json({ success: false, message: 'El usuario ya existe' });
         }
 
         // Crear el nuevo usuario sin encriptar la contraseña
-        const newUser = await db.User.create({ nombre, password, email });
+        const newUser = await db.Pacient.create({ nombre_paciente:nombre, password_paciente:password, email_paciente:email,permisos });
         res.status(201).json({ success: true, message: 'Usuario registrado correctamente', user: newUser });
     } catch (error) {
         console.error("Error al crear usuario:", error);

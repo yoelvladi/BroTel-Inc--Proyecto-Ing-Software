@@ -17,7 +17,12 @@ function Login() {
         });
         const data = await response.json();
         if (data.success) {
-            navigate('/Inicio');
+            if(data.permisos){
+                navigate('/Inicio');
+            } else {
+                navigate('/Inicio_pacientes');
+            }
+            
         } else {
             setError('Datos Incorrectos')
         }

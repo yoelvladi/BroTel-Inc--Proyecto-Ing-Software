@@ -5,11 +5,19 @@ const db = require('../models');
 const login = async (req, res) => {
     const { nombre, password } = req.body;
     try {
+        // Busca en el modelo User
         const user = await db.User.findOne({ where: { nombre, password } });
-        if (!user) {
-            return res.status(401).json({ error: 'Datos Incorrectos' });
+        if (user) {
+            return res.json({ success: true, user, permisos: true }); // Permisos true para user
         }
-        res.json({ success: true, user });
+
+        // Busca en el modelo Pacient si no se encontró en User
+        const pacient = await db.Pacient.findOne({ where: { nombre_paciente:nombre, password_paciente:password } });
+        if (pacient) {
+            return res.json({ success: true, user: pacient, permisos: false }); // Permisos false para paciente
+        }
+
+        return res.status(401).json({ error: 'Datos Incorrectos' });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error al iniciar sesión' });
@@ -44,7 +52,7 @@ router.get('/:id', async (req, res) => {
 // Ruta para crear un nuevo usuario
 
 const registro = async (req, res) => {
-    const { nombre, password, email } = req.body;
+    const { nombre, password, email, permisos } = req.body; // Agrega permisos aquí
     try {
         // Verificar si el usuario ya existe
         const existingUser = await db.User.findOne({ where: { email } });
@@ -52,14 +60,16 @@ const registro = async (req, res) => {
             return res.status(400).json({ success: false, message: 'El usuario ya existe' });
         }
 
-        // Crear el nuevo usuario sin encriptar la contraseña
-        const newUser = await db.User.create({ nombre, password, email });
+        // Crear el nuevo usuario con permisos como booleano
+        const newUser = await db.User.create({ nombre, password, email, permisos });
         res.status(201).json({ success: true, message: 'Usuario registrado correctamente', user: newUser });
     } catch (error) {
         console.error("Error al crear usuario:", error);
         res.status(500).json({ success: false, message: 'Error al crear usuario' });
     }
 };
+
+
 
 // Ruta para actualizar un usuario existente por su ID
 router.put('/:id', async (req, res) => {
@@ -96,5 +106,22 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar usuario por ID' });
     }
 });
+const verifyPermisos = async (req, res) => {
+    const { id_medico } = req.params; // Obtenemos el ID del paciente de los parámetros de la URL
+    try {
+        // Buscamos al paciente por su ID
+        const medico = await db.User.findByPk(id_paciente);
 
-module.exports ={login,registro};
+        // Verificamos si existe el paciente
+        if (!medico) {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' });
+        }
+
+        // Retornamos el valor de permisos
+        res.json({ success: true, permisos: medico.permisos });
+    } catch (error) {
+        console.error("Error al verificar permisos:", error);
+        res.status(500).json({ success: false, message: 'Error al verificar permisos' });
+    }
+};
+module.exports ={login,registro,verifyPermisos};

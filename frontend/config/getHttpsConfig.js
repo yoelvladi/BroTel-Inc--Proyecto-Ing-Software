@@ -49,18 +49,30 @@ function getHttpsConfig() {
   const { SSL_CRT_FILE, SSL_KEY_FILE, HTTPS } = process.env;
   const isHttps = HTTPS === 'true';
 
-  if (isHttps && SSL_CRT_FILE && SSL_KEY_FILE) {
+  if (isHttps) {
+    // Verifica que ambas variables estén definidas
+    if (!SSL_CRT_FILE || !SSL_KEY_FILE) {
+      throw new Error('HTTPS is enabled but SSL_CRT_FILE and SSL_KEY_FILE are not set in environment variables.');
+    }
+
     const crtFile = path.resolve(paths.appPath, SSL_CRT_FILE);
     const keyFile = path.resolve(paths.appPath, SSL_KEY_FILE);
+
+    // Verifica si los archivos existen
+    if (!fs.existsSync(crtFile) || !fs.existsSync(keyFile)) {
+      throw new Error('Key or certificate file does not exist.');
+    }
+
     const config = {
       cert: readEnvFile(crtFile, 'SSL_CRT_FILE'),
       key: readEnvFile(keyFile, 'SSL_KEY_FILE'),
     };
 
     validateKeyAndCerts({ ...config, keyFile, crtFile });
-    return config;
+    return config; // Retorna el objeto de configuración
   }
-  return isHttps;
+  
+  return null; // Cambia a null o a un objeto vacío si HTTPS no está habilitado
 }
 
 module.exports = getHttpsConfig;
