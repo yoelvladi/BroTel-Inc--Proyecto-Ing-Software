@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const db = require("../models");
 const userRoutes = require("../routes/userRoutes");
 const pacientRoutes = require("../routes/pacientRoutes");
+const imagesRoutes = require("../routes/imagesRoutes");
 const cors = require('cors');
 
 const app = express();
@@ -18,6 +19,7 @@ app.get("/api", (req, res) => {
 app.use('/api/users/login', userRoutes.login);
 app.use('/api/users/register', userRoutes.registro)
 app.use('/api/pacients/register', pacientRoutes.registro);
+app.use('/api/images/find', imagesRoutes.getImagesByPacienteID)
 // Sincronizar modelos con la base de datos
 db.sequelize.sync().then(() => {
     // Iniciar el servidor

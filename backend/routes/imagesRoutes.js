@@ -1,6 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
+const getImagesByPacienteID = async (req, res) => {
+    const { id_paciente } = req.query;
+    try {
+        const imagenes = await db.Imagen.findAll({
+            where: { paciente_id: id_paciente },
+            include: [{ model: db.Pacient, as: 'paciente' }] // Incluye el paciente en la respuesta
+        });
+
+        if (imagenes.length === 0) {
+            return res.status(404).json({ success: false, message: 'No se encontraron imágenes para este paciente' });
+        }
+
+        res.json({ success: true, imagenes });
+    } catch (error) {
+        console.error('Error al obtener las imágenes del paciente:', error);
+        res.status(500).json({ success: false, message: 'Error al obtener las imágenes del paciente' });
+    }
+};
 
 const verifyPacient = async(req , res)=>{
     const {id_paciente} = req.params;
@@ -58,4 +76,4 @@ const CreateImage = async(req,res)=>{
     }
 };
 
-module.exports ={verifyPacient,getImageID,getImagePacientID,CreateImage};
+module.exports ={getImagesByPacienteID};

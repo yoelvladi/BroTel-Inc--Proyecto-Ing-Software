@@ -17,9 +17,11 @@ function Login() {
         });
         const data = await response.json();
         if (data.success) {
+            
             if(data.permisos){
                 navigate('/Inicio');
             } else {
+                localStorage.setItem('pacienteId', data.user.id_paciente);
                 navigate('/Inicio_pacientes');
             }
             
