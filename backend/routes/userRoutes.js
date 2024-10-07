@@ -17,7 +17,7 @@ const login = async (req, res) => {
             return res.json({ success: true, user: pacient, permisos: false }); // Permisos false para paciente
         }
 
-        return res.status(401).json({ error: 'Datos Incorrectos' });
+        return res.status(401).json({ success:false, error: 'Datos Incorrectos' });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).json({ error: 'Error al iniciar sesión' });
