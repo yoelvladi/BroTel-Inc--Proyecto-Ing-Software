@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css'; // Asegúrate de importar tu hoja de estilos
 
 function Login() {
-    const [nombre, setNombre] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate()
@@ -13,7 +13,7 @@ function Login() {
         const response = await fetch('http://localhost:5000/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre, password }),
+            body: JSON.stringify({ email, password }),
         });
         const data = await response.json();
         if (data.success) {
@@ -38,11 +38,11 @@ function Login() {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit} className="login-form">
                 <div className="form-group">
-                    <label>Nombre:</label>
+                    <label>Correo:</label>
                     <input
-                        type="text"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="form-control"
                     />
                 </div>

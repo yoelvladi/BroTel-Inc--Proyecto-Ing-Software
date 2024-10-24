@@ -3,16 +3,16 @@ const router = express.Router();
 const db = require('../models');
 // Ruta del login
 const login = async (req, res) => {
-    const { nombre, password } = req.body;
+    const { email, password } = req.body;
     try {
         // Busca en el modelo User
-        const user = await db.User.findOne({ where: { nombre, password } });
+        const user = await db.User.findOne({ where: { email, password } });
         if (user) {
             return res.json({ success: true, user, permisos: true }); // Permisos true para user
         }
 
         // Busca en el modelo Pacient si no se encontró en User
-        const pacient = await db.Pacient.findOne({ where: { nombre_paciente:nombre, password_paciente:password } });
+        const pacient = await db.Pacient.findOne({ where: { email_paciente:email, password_paciente:password } });
         if (pacient) {
             return res.json({ success: true, user: pacient, permisos: false }); // Permisos false para paciente
         }

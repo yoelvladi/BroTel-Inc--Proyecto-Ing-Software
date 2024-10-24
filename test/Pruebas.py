@@ -9,8 +9,8 @@ class TestUserRoutes(unittest.TestCase):
     def test_valid_login(self):
         """Prueba con credenciales válidas"""
         payload = {
-            "nombre": "medico",
-            "password": "medico"  # Asegúrate de que esta contraseña sea correcta
+            "nombre": "vladimir",
+            "password": "hola"  # Asegúrate de que esta contraseña sea correcta
         }
         response = requests.post(f"{self.base_url}/users/login", json=payload)
         self.assertEqual(response.status_code, 200)
