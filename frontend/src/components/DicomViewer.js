@@ -21,11 +21,9 @@ const DicomViewer = () => {
     if (element) {
       cornerstone.enable(element); // Aseguramos que el visor esté habilitado al principio
     }
-
     // Deshabilitar el scroll de la página
     const preventDefaultScroll = (event) => event.preventDefault();
     document.body.addEventListener('wheel', preventDefaultScroll, { passive: false });
-
     return () => {
       const element = document.getElementById('dicomImage');
       if (element) {
@@ -58,7 +56,6 @@ const DicomViewer = () => {
           patientId: patientId,
         }),
       });
-
       if (response.ok) {
         console.log('Imagen y ID de paciente enviados correctamente');
       } else {
@@ -78,25 +75,20 @@ const DicomViewer = () => {
         cornerstoneWADOImageLoader.configure({
           useWebWorkers: true,
         });
-
         const imageIds = [];
         for (let i = 0; i < fileList.length; i++) {
           const file = fileList[i];
           if (file.name.endsWith('.dcm')) {
             const arrayBuffer = await file.arrayBuffer();
             const dataSet = dicomParser.parseDicom(new Uint8Array(arrayBuffer));
-
             const patientId = dataSet.string('x00100020');
             setPatientId(patientId);
-
             const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
             imageIds.push(imageId);
-
             const imageBase64 = await convertToBase64(file);
             await anadirimagen(imageBase64, patientId);
           }
         }
-
         setImages(imageIds);
         setError('');
       } catch (error) {
@@ -110,7 +102,6 @@ const DicomViewer = () => {
     try {
       const element = document.getElementById('dicomImage');
       cornerstone.enable(element); // Aseguramos que el visor esté habilitado
-
       for (let i = 0; i < images.length; i++) {
         const imageId = images[i];
         const image = await cornerstone.loadImage(imageId);
@@ -134,85 +125,58 @@ const DicomViewer = () => {
     event.preventDefault();
     const element = document.getElementById('dicomImage');
     const viewport = cornerstone.getViewport(element);
-
-    // Verifica que el visor esté habilitado
     if (!cornerstone.getEnabledElement(element)) return;
-
-    // Determina la dirección del zoom (acercar o alejar)
     const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1;
     const newZoom = viewport.scale * zoomFactor;
     setZoom(newZoom);
-
-    // Obtiene las coordenadas del mouse dentro del visor
     const boundingRect = element.getBoundingClientRect();
     const mouseX = event.clientX - boundingRect.left;
     const mouseY = event.clientY - boundingRect.top;
-
-    // Calcula el desplazamiento relativo en la imagen
     const scaleChange = newZoom / viewport.scale;
-
-    // El ajuste de la traslación tiene en cuenta la posición del mouse
     const newTranslation = {
       x: (mouseX * scaleChange) - (mouseX),
       y: (mouseY * scaleChange) - (mouseY),
     };
-
-    // Limitar el movimiento de la imagen (calculando el borde)
     const maxTranslationX = boundingRect.width * (newZoom - 1);
     const maxTranslationY = boundingRect.height * (newZoom - 1);
-
-    // Restricciones para que la imagen no se mueva fuera del área visible
     newTranslation.x = Math.max(Math.min(newTranslation.x, maxTranslationX), -maxTranslationX);
     newTranslation.y = Math.max(Math.min(newTranslation.y, maxTranslationY), -maxTranslationY);
-
     setTranslation(newTranslation);
-
-    // Actualiza el viewport con el nuevo zoom y traslación
     updateViewport(element);
   };
 
-  // Función para actualizar la configuración del viewport con zoom y colores
   const updateViewport = (element) => {
     const viewport = cornerstone.getViewport(element);
     viewport.scale = zoom;
     viewport.translation = translation;
-    viewport.invert = isInverted; // Aplica la inversión de colores
+    viewport.invert = isInverted;
     cornerstone.setViewport(element, viewport);
   };
 
-  // Iniciar el arrastre al hacer clic
   const startDrag = (e) => {
     e.preventDefault();
     setIsDragging(true);
     const element = document.getElementById('dicomImage');
     const boundingRect = element.getBoundingClientRect();
-
-    // Establecemos la posición inicial del mouse y la traslación actual de la imagen
     setStartPos({ x: e.clientX - boundingRect.left, y: e.clientY - boundingRect.top });
     setStartTranslation(translation);
   };
 
-  // Realizar el arrastre (mover la imagen)
   const doDrag = (e) => {
     if (isDragging) {
       const element = document.getElementById('dicomImage');
       const boundingRect = element.getBoundingClientRect();
-
       const deltaX = (e.clientX - boundingRect.left) - startPos.x;
       const deltaY = (e.clientY - boundingRect.top) - startPos.y;
-
-      // Actualizamos la traslación según el movimiento
       const newTranslation = {
         x: startTranslation.x + deltaX,
         y: startTranslation.y + deltaY,
       };
-
       setTranslation(newTranslation);
       updateViewport(element);
     }
   };
 
-  // Detener el arrastre al soltar el clic
   const stopDrag = () => {
     setIsDragging(false);
   };
@@ -235,12 +199,31 @@ const DicomViewer = () => {
         <div
           id="dicomImage"
           className="dicom-wrapper"
+          role="img"
+          aria-label="Visor de imágenes DICOM. Use scroll para hacer zoom y arrastre para mover."
+          tabIndex="0"
           style={{ marginBottom: '10px', width: '100%', height: '500px', overflow: 'hidden' }}
           onWheel={handleZoom} // Maneja el zoom al hacer scroll
           onMouseDown={startDrag} // Iniciar el arrastre
           onMouseMove={doDrag} // Mover la imagen durante el arrastre
           onMouseUp={stopDrag} // Detener el arrastre al soltar
           onMouseLeave={stopDrag} // Detener el arrastre si se sale del área
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowUp') {
+              setTranslation((prev) => ({ ...prev, y: prev.y - 10 })); // Mover hacia arriba
+            } else if (e.key === 'ArrowDown') {
+              setTranslation((prev) => ({ ...prev, y: prev.y + 10 })); // Mover hacia abajo
+            } else if (e.key === 'ArrowLeft') {
+              setTranslation((prev) => ({ ...prev, x: prev.x - 10 })); // Mover hacia la izquierda
+            } else if (e.key === 'ArrowRight') {
+              setTranslation((prev) => ({ ...prev, x: prev.x + 10 })); // Mover hacia la derecha
+            } else if (e.key === '+') {
+              setZoom((prev) => prev * 1.1); // Aumentar zoom
+            } else if (e.key === '-') {
+              setZoom((prev) => prev * 0.9); // Reducir zoom
+            }
+            updateViewport(document.getElementById('dicomImage'));
+          }}
         >
           {images.map((imageId, index) => (
             <div key={index} className="dicom-viewer">
