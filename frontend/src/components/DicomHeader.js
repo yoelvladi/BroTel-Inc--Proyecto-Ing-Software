@@ -113,8 +113,8 @@ const DicomHeader = () => {
         />
         <button onClick={handleReset} className="reset-button">Limpiar</button>
         <button onClick={handleExportToExcel} className="export-button">Exportar a Excel</button>
-        {filteredDicomInfo.map((item, index) => (
-          <div key={index} className="dicom-info-item">
+        {filteredDicomInfo.map((item) => (
+          <div key={item.title} className="dicom-info-item">
             <h3>{item.title}</h3>
             <p>{item.value}</p>
           </div>

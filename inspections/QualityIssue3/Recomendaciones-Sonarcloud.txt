@@ -1,0 +1,5 @@
+1- Sonarcloud nos recomienda hacer una variable a la cual llamar en caso "Datos Incorrectos", en vez de usarlo como literal en cada vez que se repita, debido a su alta repetición en el código, es mala práctica usar un literal siendo que se repite tantas veces en el código Pruebas.py.
+
+Como lo abordaremos:
+
+Al ser una mala práctica, vamos a crear una constante que será llamada en vez de usar el literal.

@@ -1,0 +1,5 @@
+1 - Sonarcloud nos recomienda borrar el associate vacío en user.js, ya que es mala práctica tener asociaciones que no se usan y además afecta la legibilidad del código generando confusión al quien quiere entender el código.
+
+Como lo abordaremos:
+
+Pese a que la asociación puede ser útil en un futuro, ya que puede que ya no este vacía, hemos llegado a un consenso de que lo mejor es eliminarla para evitar confusiones de legibilidad.

@@ -3,11 +3,8 @@
 const {Model, DataTypes, Sequelize} = require('sequelize');
 
 module.exports = (sequelize) =>{
-    class Pacient extends Model{
-        static associate(models){
-
-        }
-    }
+    class Pacient extends Model{}
+    
     Pacient.init({
         id_paciente:{
             type: DataTypes.INTEGER,

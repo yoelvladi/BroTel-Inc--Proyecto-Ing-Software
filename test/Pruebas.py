@@ -1,5 +1,6 @@
 import unittest
 import requests
+Error_s = str("Datos Incorrectos")
 class TestUserRoutes(unittest.TestCase):
 
     @classmethod
@@ -42,7 +43,7 @@ class TestUserRoutes(unittest.TestCase):
         print("\n")
         # Verifica el mensaje de error
         self.assertIn("error", json_response)
-        self.assertEqual(json_response["error"], "Datos Incorrectos")  # Verifica el mensaje de error
+        self.assertEqual(json_response["error"], Error_s)  # Verifica el mensaje de error
     def test_login_empty_password(self):
         """Prueba de login con contraseña vacía"""
         payload = {
@@ -54,7 +55,7 @@ class TestUserRoutes(unittest.TestCase):
         json_response = response.json()
         self.assertFalse(json_response.get("success", True))
         self.assertIn("error", json_response)
-        self.assertEqual(json_response["error"], "Datos Incorrectos")  # Mensaje esperado
+        self.assertEqual(json_response["error"], Error_s)  # Mensaje esperado
         print("Prueba de login con contraseña vacía"+"\n")
         print(response.json())
         print("\n")
@@ -69,7 +70,7 @@ class TestUserRoutes(unittest.TestCase):
         json_response = response.json()
         self.assertFalse(json_response.get("success", True))
         self.assertIn("error", json_response)
-        self.assertEqual(json_response["error"], "Datos Incorrectos")
+        self.assertEqual(json_response["error"], Error_s)
         print("Prueba de login con usuario no existente"+"\n")
         print(response.json())
         print("\n")

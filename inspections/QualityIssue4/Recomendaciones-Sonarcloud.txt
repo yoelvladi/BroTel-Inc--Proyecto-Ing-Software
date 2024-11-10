@@ -1,0 +1,5 @@
+1- Sonarcloud nos advierte que estamos usando un index innecesario en DicomViewer.js, nos dice que es mejor práctica usar directamente item.title, en vez de usar un index.
+
+Como lo abordaremos:
+
+Eliminaremos ese index y usaremos item.title para evitar declaraciones innecesarias en el código, siendo más legible y mas eficiente.
