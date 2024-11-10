@@ -1,0 +1,1 @@
+Se puede ver que en la primera revisión, antes de corregir las quality issues, el proyecto presentaba 5 issues de grado crítico y 23 de grado medio

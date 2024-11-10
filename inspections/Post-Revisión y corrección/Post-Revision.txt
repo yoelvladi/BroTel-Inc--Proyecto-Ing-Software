@@ -1,0 +1,1 @@
+Luego de hacer las correciones correspondientes de las quality issues y además corregir cierto detalles de otras issues, se puede ver que se bajo 18 issues del proyecto, 3 de grado crítico
