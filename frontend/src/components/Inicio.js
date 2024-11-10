@@ -7,7 +7,6 @@ import Inicio from '../components/Inicio';
 import DicomViewer from '../components/DicomViewer';
 import DicomHeader from '../components/DicomHeader';
 import Registro from '../components/Registro';
-
 import Nav from '../components/Nav';
 import '../styles/inicio.css';
 
@@ -18,7 +17,7 @@ function Dashboard() {
       <nav>
         <Nav />
       </nav>
-      <body className="fondo">
+        <body className="fondo">
           <div className="introduction-container">
             <h1>Bienvenidos al Visualizador de Imágenes de Cabecera DICOM</h1>
             <p>
