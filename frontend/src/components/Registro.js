@@ -39,35 +39,39 @@ function Register() {
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <form onSubmit={handleSubmit} className="register-form">
                     <div className="form-group">
-                        <label>Nombre:</label>
+                        <label htmlFor="nombre">Nombre:</label>
                         <input
                             type="text"
+                            id="nombre"
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
                             className="form-control"
                         />
                     </div>
                     <div className="form-group">
-                        <label>Email:</label>
+                        <label htmlFor="email">Email:</label>
                         <input
                             type="email"
+                            id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="form-control"
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password:</label>
+                        <label htmlFor="password">Password:</label>
                         <input
                             type="password"
+                            id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="form-control"
                         />
                     </div>
                     <div className="form-group">
-                        <label>¿Eres médico?</label>
+                        <label htmlFor="esMedico">¿Eres médico?</label>
                         <select
+                            id="esMedico"
                             value={esMedico}
                             onChange={(e) => setEsMedico(e.target.value === 'true')}
                             className="form-control"
@@ -84,5 +88,3 @@ function Register() {
 }
 
 export default Register;
-
-

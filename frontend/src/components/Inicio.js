@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import About from '../components/About';
 import Contact from '../components/Contact';
 import Login from '../components/login';
-import Inicio from '../components/Inicio';
 import DicomViewer from '../components/DicomViewer';
 import DicomHeader from '../components/DicomHeader';
 import Registro from '../components/Registro';
@@ -59,7 +58,6 @@ function Dashboard() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/inicio" element={<Inicio />} />
         <Route path="/DicomViewer" element={<DicomViewer />} />
         <Route path="/DicomHeader" element={<DicomHeader />} />
       </Routes>

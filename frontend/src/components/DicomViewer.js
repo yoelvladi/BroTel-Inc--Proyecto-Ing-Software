@@ -7,7 +7,7 @@ import '../styles/styles.css';
 
 const DicomViewer = () => {
   const [images, setImages] = useState([]);
-  const [patientId, setPatientId] = useState('');
+  const [, setPatientId] = useState('');
   const [error, setError] = useState('');
   const [isInverted, setIsInverted] = useState(false);
   const [zoom, setZoom] = useState(1); // Zoom inicial
@@ -39,7 +39,9 @@ const DicomViewer = () => {
       reader.onloadend = () => {
         resolve(reader.result);
       };
-      reader.onerror = (error) => reject(error);
+      reader.onerror = () => {
+        reject(new Error("Error al convertir el archivo a Base64"));
+      };
       reader.readAsDataURL(file);
     });
   };
@@ -76,8 +78,7 @@ const DicomViewer = () => {
           useWebWorkers: true,
         });
         const imageIds = [];
-        for (let i = 0; i < fileList.length; i++) {
-          const file = fileList[i];
+        for (const file of fileList) {
           if (file.name.endsWith('.dcm')) {
             const arrayBuffer = await file.arrayBuffer();
             const dataSet = dicomParser.parseDicom(new Uint8Array(arrayBuffer));
@@ -102,12 +103,11 @@ const DicomViewer = () => {
     try {
       const element = document.getElementById('dicomImage');
       cornerstone.enable(element); // Aseguramos que el visor esté habilitado
-      for (let i = 0; i < images.length; i++) {
-        const imageId = images[i];
+      for (const imageId of images) {
         const image = await cornerstone.loadImage(imageId);
         cornerstone.displayImage(element, image);
         updateViewport(element);
-      }
+      }      
     } catch (error) {
       console.error('Error displaying images:', error);
       setError('Error displaying images');
@@ -225,11 +225,11 @@ const DicomViewer = () => {
             updateViewport(document.getElementById('dicomImage'));
           }}
         >
-          {images.map((imageId, index) => (
-            <div key={index} className="dicom-viewer">
+          {images.map((imageId) => (
+            <div key={imageId} className="dicom-viewer">
               <canvas
                 className="cornerstone-canvas"
-                id={`dicomCanvas-${index}`}
+                id={`dicomCanvas-${imageId}`}
                 style={{ marginBottom: '10px' }}
               ></canvas>
             </div>

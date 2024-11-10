@@ -107,7 +107,7 @@ router.delete('/:id', async (req, res) => {
     }
 });
 const verifyPermisos = async (req, res) => {
-    const { id_medico } = req.params; // Obtenemos el ID del paciente de los parámetros de la URL
+    const { id_paciente } = req.params; // Obtenemos el ID del paciente de los parámetros de la URL
     try {
         // Buscamos al paciente por su ID
         const medico = await db.User.findByPk(id_paciente);
