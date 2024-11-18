@@ -1,5 +1,6 @@
 const express = require('express');
 const { Sequelize } = require("sequelize");
+const path = require('path'); 
 const db = require("../models");
 const userRoutes = require("../routes/userRoutes");
 const pacientRoutes = require("../routes/pacientRoutes");
@@ -14,7 +15,7 @@ app.use(cors());
 app.get("/api", (req, res) => {
     res.json({ mensaje: "Hola mi gentesita" });
 });
-
+app.use('/api/images', express.static(path.join(__dirname, '../imagenes')));
 // Rutas para el modelo
 app.use('/api/users/login', userRoutes.login);
 app.use('/api/users/register', userRoutes.registro)

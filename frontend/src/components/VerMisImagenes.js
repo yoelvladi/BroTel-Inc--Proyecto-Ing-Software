@@ -1,29 +1,60 @@
-// src/components/VerMisImagenes.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import cornerstone from 'cornerstone-core';
+import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+import dicomParser from 'dicom-parser'; // Importa dicom-parser
 
 function VerMisImagenes() {
   const [imagenes, setImagenes] = useState([]);
-  const pacienteId = localStorage.getItem('pacienteId'); // Obtener el ID del paciente desde el localStorage
+  const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
+  const pacienteId = localStorage.getItem('pacienteId');
+  const viewerRef = useRef(null); // Referencia al contenedor de la imagen
 
   useEffect(() => {
-    // Aquí llamamos a la API para obtener las imágenes filtradas por el ID del paciente
+    // Configurar dicomParser en cornerstoneWADOImageLoader
+    cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
+    cornerstoneWADOImageLoader.external.dicomParser = dicomParser; // Añadir dicomParser
+
+    cornerstone.registerImageLoader('wadouri', cornerstoneWADOImageLoader.wadouri.loadImage);
+
+    // Llama a la API para obtener las imágenes filtradas por el ID del paciente
     fetch(`http://localhost:5000/api/images/find?id_paciente=${pacienteId}`)
       .then(response => {
         if (!response.ok) {
-          throw new Error(`Error: ${response.status}`); // Lanza un error si la respuesta no es OK
+          throw new Error(`Error: ${response.status}`);
         }
         return response.json();
       })
       .then(data => {
         if (data.success) {
-          setImagenes(data.imagenes); // Asegúrate de que estás accediendo a 'imagenes'
+          setImagenes(data.imagenes);
         } else {
           console.error(data.message);
-          setImagenes([]); // Maneja el caso de que no haya imágenes
+          setImagenes([]);
         }
       })
       .catch(error => console.error('Error al cargar las imágenes:', error));
   }, [pacienteId]);
+
+  useEffect(() => {
+    // Si una imagen es seleccionada, cargarla con Cornerstone
+    if (imagenSeleccionada) {
+      const element = viewerRef.current;
+
+      cornerstone.enable(element); // Habilita Cornerstone en el contenedor
+
+      const imageUrl = `http://localhost:5000/api/images/${imagenSeleccionada.imagen_file}`;
+      cornerstone.loadImage('wadouri:' + imageUrl).then(image => {
+        cornerstone.displayImage(element, image); // Muestra la imagen DICOM en el visor
+      }).catch(err => {
+        console.error('Error al cargar la imagen DICOM:', err);
+      });
+
+      // Limpiar el visor cuando la imagen se deselecciona
+      return () => {
+        cornerstone.disable(element);
+      };
+    }
+  }, [imagenSeleccionada]);
 
   return (
     <div>
@@ -39,8 +70,13 @@ function VerMisImagenes() {
           {imagenes.length > 0 ? (
             imagenes.map((imagen) => (
               <tr key={imagen.id_image}>
-                <td>{imagen.imagen_file}</td>
-                <td>{new Date(imagen.createdAt).toLocaleDateString()}</td> {/* Muestra la fecha de creación */}
+                <td
+                  style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+                  onClick={() => setImagenSeleccionada(imagen)} // Selecciona la imagen
+                >
+                  {imagen.imagen_file}
+                </td>
+                <td>{new Date(imagen.createdAt).toLocaleDateString()}</td>
               </tr>
             ))
           ) : (
@@ -50,9 +86,25 @@ function VerMisImagenes() {
           )}
         </tbody>
       </table>
+
+      {/* Visor para la imagen seleccionada */}
+      {imagenSeleccionada && (
+        <div>
+          <h2>Visualizando: {imagenSeleccionada.imagen_file}</h2>
+          <div
+            ref={viewerRef}
+            style={{
+              width: '600px',
+              height: '400px',
+              border: '1px solid black',
+              position: 'relative'
+            }}
+          ></div>
+          <button onClick={() => setImagenSeleccionada(null)}>Cerrar Visor</button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default VerMisImagenes;
-
